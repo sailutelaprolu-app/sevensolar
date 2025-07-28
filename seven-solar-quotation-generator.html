@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Quotation Generator - Seven Solar</title>
+<style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #ffe082, #ffcc80);
+      padding: 30px;
+      margin: 0;
+    }
+    .container {
+      max-width: 800px;
+      background: white;
+      margin: auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    h2 {
+      color: #e65100;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      display: block;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    .full-width {
+      grid-column: span 2;
+    }
+    button {
+      grid-column: span 2;
+      padding: 12px;
+      background-color: #ef6c00;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #e65100;
+    }
+    .output {
+      grid-column: span 2;
+      margin-top: 20px;
+      background: #fff8e1;
+      padding: 15px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+<div class="container"><img src="seven-solar-logo.png" style="max-width: 160px; margin-bottom: 20px;"/>
+<h2>Generate Quotation</h2>
+<form onsubmit="generateQuote(); return false;">
+<div>
+<label for="panel">Panel Make</label>
+<select id="panel" required="">
+<option value="">Select</option>
+<option value="Luminous">Luminous</option>
+<option value="Waaree">Waaree</option>
+<option value="Adani">Adani</option>
+</select>
+</div>
+<div>
+<label for="inverter">Inverter Make</label>
+<select id="inverter" required="">
+<option value="">Select</option>
+<option value="Growatt">Growatt</option>
+<option value="Luminous">Luminous</option>
+<option value="Sungrow">Sungrow</option>
+</select>
+</div>
+<div>
+<label for="capacity">System Capacity (kW)</label>
+<input id="capacity" required="" type="number"/>
+</div>
+<div>
+<label for="structure">Structure Type</label>
+<select id="structure" required="">
+<option value="">Select</option>
+<option value="GI">GI</option>
+<option value="Aluminium">Aluminium</option>
+</select>
+</div>
+<button type="submit">Generate</button>
+<div class="output" id="quoteResult"></div>
+</form>
+</div>
+<script>
+    function generateQuote() {
+      const panel = document.getElementById("panel").value;
+      const inverter = document.getElementById("inverter").value;
+      const capacity = parseFloat(document.getElementById("capacity").value);
+      const structure = document.getElementById("structure").value;
+
+      const ratePerKW = 52000;
+      const total = capacity * ratePerKW;
+
+      const quote = {
+        panel, inverter, capacity, structure, total, timestamp: new Date().toISOString()
+      };
+
+      localStorage.setItem("sevenSolarQuotation", JSON.stringify(quote));
+
+      document.getElementById("quoteResult").innerHTML =
+        `<b>Quotation Summary:</b><br>
+        Panel: ${panel}<br>
+        Inverter: ${inverter}<br>
+        Structure: ${structure}<br>
+        Capacity: ${capacity} kW<br>
+        <b>Total Estimated Cost: ₹${total.toLocaleString()}</b>`;
+    }
+  </script>
+</body>
+</html>
